@@ -1,11 +1,12 @@
 ﻿using PhoneBookWithFile.Models;
+using System.Text.Json;
 
 namespace PhoneBookWithFile.Services;
 
 internal class FileService : IFileService
 {
     private ILoggingService loggingService;
-    private const string filePath = "../../../Contacts.txt";
+    private const string filePath = "../../../Contacts.json";
 
     public FileService()
     {
@@ -25,9 +26,9 @@ internal class FileService : IFileService
 
     public Contact AddContact(Contact contact)
     {
-        var contents = new string[] { $"{contact.Name} : {contact.PhoneNumber}" };
+        var jsonContact = JsonSerializer.Serialize(contact);
+        var contents = new string[] { jsonContact };
         File.AppendAllLines(filePath, contents);
-
 
         return contact;
     }
@@ -35,10 +36,10 @@ internal class FileService : IFileService
     public bool DeleteContact(string phoneNumber)
     {
         var isThereContact = false;
-        var contacts = File.ReadAllLines(filePath).ToList();
+        var contacts = ReadAllContacts();
         foreach (var contact in contacts)
         {
-            if (contact.Contains(phoneNumber))
+            if (contact.PhoneNumber == phoneNumber)
             {
                 isThereContact = true;
                 contacts.Remove(contact);
@@ -51,14 +52,30 @@ internal class FileService : IFileService
             return false;
         }
 
-        File.WriteAllLines(filePath, contacts);
+        var stringContacts = new List<string>();
+        foreach (var contact in contacts)
+        {
+            var stringContact = JsonSerializer.Serialize(contact);
+            stringContacts.Add(stringContact);
+        }
+        File.WriteAllLines(filePath, stringContacts);
 
         return true;
     }
 
-    public List<string> ReadAllContacts()
+    public List<Contact> ReadAllContacts()
     {
-        return File.ReadAllLines(filePath).ToList();
+        var contacts = new List<Contact>();
+
+        var jsonContacts = File.ReadAllLines(filePath);
+        foreach (var jsonContact in jsonContacts)
+        {
+            var contact = JsonSerializer.Deserialize<Contact>(jsonContact);
+            contacts.Add(contact);
+        }
+
+        return contacts;
     }
+
 
 }

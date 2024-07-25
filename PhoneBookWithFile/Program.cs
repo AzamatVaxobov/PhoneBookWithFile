@@ -48,7 +48,7 @@ namespace PhoneBookWithFile
                     var contacts = fileService.ReadAllContacts();
                     foreach ( var contact in contacts )
                     {
-                        logService.LogInformation(contact);
+                        logService.LogInformation(contact.Name + "\t: " + contact.PhoneNumber);
                     }
                 }
                 else if (option == "4")
