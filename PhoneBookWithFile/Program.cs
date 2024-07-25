@@ -9,7 +9,20 @@ namespace PhoneBookWithFile
         {
 
 
-            IFileService fileService = new FileService();
+            IFileService fileService;
+            
+            Console.WriteLine("Choose file type: 0-JSON, 1-TXT");
+            string fileType = Console.ReadLine();
+            
+            if (fileType == "0")
+            {
+                fileService = new FileService();
+            }
+            else
+            {
+                fileService = new TxtFileService();
+            }
+            
             ILoggingService logService = new LoggingService();
 
             while (true)
