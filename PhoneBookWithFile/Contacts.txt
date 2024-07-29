@@ -1,0 +1,3 @@
+{"Name":"Azamat","PhoneNumber":"940040224"}
+{"Name":"Avazbek","PhoneNumber":"939730555"}
+{"Name":"Asadbek","PhoneNumber":"940030223"}

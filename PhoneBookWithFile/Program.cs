@@ -8,10 +8,10 @@ namespace PhoneBookWithFile
         static void Main(string[] args)
         {
 
-
             IFileService fileService;
-            
-            Console.WriteLine("Choose file type: 0-JSON, 1-TXT");
+            ILoggingService logService = new LoggingService();
+            logService.LogInformation("Choose file type: 0-JSON, 1-TXT");
+            Console.Write("Enter :");
             string fileType = Console.ReadLine();
             
             if (fileType == "0")
@@ -23,7 +23,6 @@ namespace PhoneBookWithFile
                 fileService = new TxtFileService();
             }
             
-            ILoggingService logService = new LoggingService();
 
             while (true)
             {
